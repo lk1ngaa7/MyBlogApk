@@ -4,10 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <title></title>
-    <script src="js/mui.min.js"></script>
-    <link href="css/mui.min.css" rel="stylesheet"/>
+    <script src="../js/mui.min.js"></script>
+    <link href="../css/mui.min.css" rel="stylesheet"/>
     <script type="text/javascript" charset="utf-8">
-      	mui.init();
+      	mui.ready(function(){
+      		mui.init();
+      	})
+      	
     </script>
     <style>
 			html,
@@ -23,6 +26,61 @@
 		</style>
 </head>
 <body>
-	
+     
+       <div class="mui-content-padded" >
+       <div class="mui-card" >
+         <div class="mui-content-padded" id="content" >
+         </div>
+        </div>
+     </div>
 </body>
+<script>
+	 
+	 (function($) {
+	 	 // 获取 queryString的值，通过这个来获取ajax数据
+	 	 function getQueryString(param){
+		 	 var url = document.location.href;
+		  	 var arrStr = url.substring(url.indexOf("?")+1).split("&");
+		  	 for(var i = 0 ;i < arrStr.length ;i++ ){
+		  	     var loc = arrStr[i].indexOf(param+"=");
+		  	     if(loc != -1){
+		  	     	return arrStr[i].replace(param+"=","").replace("?","");
+		  	     	break;
+		  	     }
+		  	 }
+		  	 return "";
+ 		}
+
+		var respnoseContent = document.getElementById("content");
+		var respnoseHeader = document.getElementsByClassName("mui-h1");
+		var content;
+		//成功响应的回调函数
+		var success = function(response) {
+			//console.log(response.page.content);
+			content = response;
+			respnoseContent.innerHTML = response.page.content;
+			
+		};
+		var ajax = function() {
+			var url = 'http://www.king-liu.net?page_id='+getQueryString("pageId")+"&json=1";
+			//请求方式，默认为Get；
+			var type = "get";
+			//预期服务器范围的数据类型
+			var dataType = "json";
+			respnoseContent.innerHTML = '正在请求中...';
+			content = $.getJSON(url, "data", success);
+			return content;
+		};
+   
+        content = ajax();
+		console.log(content.page);
+		mui.plusReady(function(){
+			// 这里调用 plus api
+			
+		     
+		   
+		});
+	})(mui);
+	
+</script>
 </html>
