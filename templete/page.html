@@ -23,6 +23,13 @@
 			.mui-bar-nav~.mui-content {
 				padding: 0;
 			}
+			p {
+				font-size:17px;
+				color:#000000;
+			}
+			.mui-card {
+				margin: 0 5px;
+			}
 		</style>
 </head>
 <body>
@@ -37,49 +44,70 @@
 <script>
 	 
 	 (function($) {
-	 	 // 获取 queryString的值，通过这个来获取ajax数据
-	 	 function getQueryString(param){
-		 	 var url = document.location.href;
-		  	 var arrStr = url.substring(url.indexOf("?")+1).split("&");
-		  	 for(var i = 0 ;i < arrStr.length ;i++ ){
-		  	     var loc = arrStr[i].indexOf(param+"=");
-		  	     if(loc != -1){
-		  	     	return arrStr[i].replace(param+"=","").replace("?","");
-		  	     	break;
-		  	     }
-		  	 }
-		  	 return "";
- 		}
-
-		var respnoseContent = document.getElementById("content");
-		var respnoseHeader = document.getElementsByClassName("mui-h1");
-		var content;
-		//成功响应的回调函数
-		var success = function(response) {
-			//console.log(response.page.content);
-			content = response;
-			respnoseContent.innerHTML = response.page.content;
+	    mui.plusReady(function(){
+				// 这里调用 plus api
+				// 获取 queryString的值，通过这个来获取ajax数据
+		 	 function getQueryString(param){
+			 	 var url = document.location.href;
+			  	 var arrStr = url.substring(url.indexOf("?")+1).split("&");
+			  	 for(var i = 0 ;i < arrStr.length ;i++ ){
+			  	     var loc = arrStr[i].indexOf(param+"=");
+			  	     if(loc != -1){
+			  	     	return arrStr[i].replace(param+"=","").replace("?","");
+			  	     	break;
+			  	     }
+			  	 }
+			  	 return "";
+	 		}
+	       // 获取本地的缓存资源
+	       function getCache(pageKey){
+	       	  var storge = plus.storage;
+	       	  var c  = storge.getItem(pageKey);
+	       	  if(c){
+	       	  	var content = JSON.parse(c);
+	       	  	return content;
+	       	  }else{
+	       	  	return "正在请求.........";
+	       	  }
+	     
+	     
+	       }
+			var respnoseContent = document.getElementById("content");
+			var respnoseHeader = document.getElementsByClassName("mui-h1");
 			
-		};
-		var ajax = function() {
-			var url = 'http://www.king-liu.net?page_id='+getQueryString("pageId")+"&json=1";
-			//请求方式，默认为Get；
-			var type = "get";
-			//预期服务器范围的数据类型
-			var dataType = "json";
-			respnoseContent.innerHTML = '正在请求中...';
-			content = $.getJSON(url, "data", success);
-			return content;
-		};
-   
-        content = ajax();
-		console.log(content.page);
-		mui.plusReady(function(){
-			// 这里调用 plus api
-			
-		     
+			//成功响应的回调函数
+			var success = function(response) {
+				respnoseContent.innerHTML = response.page.content;
+				var cache = getCache("page-"+getQueryString("pageId"))
+				if(typeof cache === 'string'){
+					plus.storage.setItem("page-"+getQueryString("pageId"),JSON.stringify(response));
+				}else{
+					var ajaxTime = Date.parse(response.page.modify);
+					var cacheTime = Date.parse(cache.page.modify);
+					if(cacheTime !== ajaxTime){
+						plus.storage.setItem("page-"+getQueryString("pageId"),JSON.stringify(response));
+					}
+				}
+				
+			};
+			var ajax = function() {
+				var url = 'http://www.king-liu.net?page_id='+getQueryString("pageId")+"&json=1";
+				//请求方式，默认为Get；
+				var type = "get";
+				//预期服务器范围的数据类型
+				var dataType = "json";
+				respnoseContent.innerHTML = getCache("page-"+getQueryString("pageId")).page.content;
+				content = $.getJSON(url, "data", success);
+				
+			};
+	   
+	         
+	         ajax();
+			 console.log();
+			     
 		   
 		});
+	
 	})(mui);
 	
 </script>
