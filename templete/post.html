@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>TopPhper</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/doc.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/doc.js"></script>
+		<script src="../js/prettify.js"></script>
+		
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">文章详情</h1>
+		</header>
+	    
+	    <article>
+	    	
+	    </article>
+		
+		<nav class="mui-bar mui-bar-tab">
+			<a id="defaultTab" class="mui-tab-item mui-active views" href="content">
+				<span class="mui-icon mui-icon-home"></span>
+				<span class="mui-tab-label">文章</span>
+			</a>
+			
+			<a  class="mui-tab-item views" href="comments">
+				<span class="mui-icon mui-icon-chatbubble"><span class="mui-badge">9</span></span>
+				<span class="mui-tab-label">评论</span>
+			</a>
+			
+			<a id="share-btn" class="mui-tab-item" href="tab-webview-subpage-contact.html">
+				<span class="mui-icon mui-icon-pengyouquan"></span>
+				<span class="mui-tab-label">分享</span>
+			</a>
+			
+			<a class="mui-tab-item" href="tab-webview-subpage-setting.html">
+				<span class="mui-icon mui-icon-star"></span>
+				<span class="mui-tab-label">点赞</span>
+			</a>
+		</nav>
+		<script type="text/javascript" charset="utf-8">
+			var subpages = ['comments.html'];
+			var subpage_style = {
+				top: '46px',
+				bottom: '50px'
+			};
+			
+			//创建子页面，首个选项卡页面显示，其它均隐藏；
+			mui.plusReady(function(){
+				var self = plus.webview.currentWebview();
+				for(var i=0;i<1;i++){
+					/*var sub = plus.webview.create(subpages[i],subpages[i],subpage_style);
+					if(i>0){
+						sub.hide();
+					}
+					self.append(sub);*/
+				}
+			});
+			
+			//当前激活选项
+			var activeTab = subpages[0];
+			var title = document.getElementById("title");
+			//选项卡点击事件
+			mui('.mui-bar-tab').on('tap', '.views', function(e) {
+				var targetTab = this.getAttribute('href');
+				if (targetTab == activeTab) {
+					return;
+				}
+				//更换标题
+				title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
+				//显示目标选项卡
+				plus.webview.show(targetTab);
+				//隐藏当前;
+				plus.webview.hide(activeTab);
+				//更改当前活跃的选项卡
+				activeTab = targetTab;
+			});
+			
+		document.getElementById("share-btn").addEventListener('tap',function () {
+			var btnArray = [{title:"盆友圈"},{title:"微博"},{title:"微信好友"}];
+			plus.nativeUI.actionSheet( {
+				cancel:"取消",
+				buttons:btnArray
+			}, function(e){
+				var index = e.index;
+				var text = "你刚点击了\"";
+				switch (index){
+					case 0:
+						text += "取消";
+						break;
+					case 1:
+						text += "盆友圈";
+						break;
+					case 2:
+						text += "微博";
+						break;
+					case 3:
+						text += "微信好友";
+						break;
+				}
+				
+			} );
+		});
+		</script>
+	</body>
+</html>
