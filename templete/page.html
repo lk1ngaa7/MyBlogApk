@@ -77,15 +77,18 @@
 			
 			//成功响应的回调函数
 			var success = function(response) {
-				respnoseContent.innerHTML = response.page.content;
+				
 				var cache = getCache("page-"+getQueryString("pageId"))
 				if(typeof cache === 'string'){
+					respnoseContent.innerHTML = response.page.content;
 					plus.storage.setItem("page-"+getQueryString("pageId"),JSON.stringify(response));
 				}else{
 					var ajaxTime = Date.parse(response.page.modify);
 					var cacheTime = Date.parse(cache.page.modify);
 					if(cacheTime !== ajaxTime){
+						respnoseContent.innerHTML = response.page.content;
 						plus.storage.setItem("page-"+getQueryString("pageId"),JSON.stringify(response));
+						
 					}
 				}
 				
@@ -96,12 +99,12 @@
 				var type = "get";
 				//预期服务器范围的数据类型
 				var dataType = "json";
+				var cache = getCache("page-"+getQueryString("pageId"));
+				if(typeof cache !== 'string')
 				respnoseContent.innerHTML = getCache("page-"+getQueryString("pageId")).page.content;
-				content = $.getJSON(url, "data", success);
+				$.getJSON(url, "data", success);
 				
 			};
-	   
-	         
 	         ajax();
 			 console.log();
 			     

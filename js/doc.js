@@ -9,6 +9,5 @@ document.oncontextmenu=shield;
 // DOMContentLoaded事件处理
 document.addEventListener('DOMContentLoaded',function(){
 	document.body.onselectstart=shield;
-	prettyPrint();
 },false);
 })(window);

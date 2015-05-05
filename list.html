@@ -94,62 +94,8 @@
       Recent Post
     </h5>
    			<ul id="list" class="mui-table-view mui-table-view-chevron">
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="images/cbd.jpg">
-						<div class="mui-media-body">
-							给面试官老师的
-							<p class='mui-ellipsis'>这里是我用来记录我在平时学习的学习记录，这篇文章是一个对我的博客的有价值的文章的一个总结，方便面试老师查看。 项目： 1.易淘二手交易平台 2.亚西文化业务管理系统 3.重庆第二师</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="images/cbd.jpg">
-						<div class="mui-media-body">
-							给面试官老师的
-							<p class='mui-ellipsis'>这里是我用来记录我在平时学习的学习记录，这篇文章是一个对我的博客的有价值的文章的一个总结，方便面试老师查看。 项目： 1.易淘二手交易平台 2.亚西文化业务管理系统 3.重庆第二师</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="images/cbd.jpg">
-						<div class="mui-media-body">
-							给面试官老师的
-							<p class='mui-ellipsis'>这里是我用来记录我在平时学习的学习记录，这篇文章是一个对我的博客的有价值的文章的一个总结，方便面试老师查看。 项目： 1.易淘二手交易平台 2.亚西文化业务管理系统 3.重庆第二师</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="images/cbd.jpg">
-						<div class="mui-media-body">
-							给面试官老师的
-							<p class='mui-ellipsis'>这里是我用来记录我在平时学习的学习记录，这篇文章是一个对我的博客的有价值的文章的一个总结，方便面试老师查看。 项目： 1.易淘二手交易平台 2.亚西文化业务管理系统 3.重庆第二师</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="images/cbd.jpg">
-						<div class="mui-media-body">
-							给面试官老师的
-							<p class='mui-ellipsis'>这里是我用来记录我在平时学习的学习记录，这篇文章是一个对我的博客的有价值的文章的一个总结，方便面试老师查看。 项目： 1.易淘二手交易平台 2.亚西文化业务管理系统 3.重庆第二师</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a class='mui-navigate-right' href="javascript:;">
-						<img class="mui-media-object mui-pull-left" src="images/yuantiao.jpg">
-						<div class="mui-media-body">
-							远眺
-							<p class='mui-ellipsis'>静静的看这个世界，最后终于疯了</p>
-						</div>
-					</a>
-				</li>
-				
-				<li class="mui-table-view-cell mui-media">
+				<div id="space"></div>
+				<!--<li class="mui-table-view-cell mui-media">
 					<a class="mui-navigate-right" post-id="1">
 						<img class="mui-media-object mui-pull-left" src="images/shuijiao.jpg">
 						<div class="mui-media-body">
@@ -157,7 +103,7 @@
 							<p class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
 						</div>
 					</a>
-				</li>
+				</li>-->
 			</ul>
     
 	</body>
@@ -171,7 +117,51 @@
 					}
 				}
 			}
-			
+			function removeHTMLTag(str) {
+		            str = str.replace(/<\/?[^>]*>/g,''); 
+		            str = str.replace(/[ | ]*\n/g,'\n');
+		            str=str.replace(/&nbsp;/ig,'');
+		            return str;
+              }
+			var createNode = function(post){
+				var li = document.createElement('li');
+				li.className="mui-table-view-cell mui-media";
+			    var a = document.createElement('a');
+			    a.className="mui-navigate-right";
+			    a.href= post.id;
+			    li.appendChild(a);
+			    var img = document.createElement('img');
+			    img.className = "mui-media-object mui-pull-left";
+			    img.src = "images/shuijiao.jpg";
+			    a.appendChild(img);
+			    var div = document.createElement('div');
+			    div.className = "mui-media-body";
+			    var title = document.createTextNode(post.title);
+			    div.appendChild(title);
+			    var p = document.createElement('p');
+			    p.className = "mui-ellipsis";
+			    var content = document.createTextNode(removeHTMLTag(post.content).substr(0,20));
+			    p.appendChild(content);
+			    div.appendChild(p);
+			    a.appendChild(div);
+			    return li;
+			}
+			var createList = function(json){
+			   	var posts = json.posts;
+			   	var length = json.count;
+			   	var space = document.getElementById("space");
+				for(var i = 0;i<length;i++){
+					space.insertBefore(createNode(posts[i]));
+					
+				}
+			}
+			var success = function(response){
+				createList(response);
+			}
+			var getList = function(){
+				var url = "http://www.king-liu.net/";
+				mui.getJSON(url,{json:"get_recent_posts"},success);
+			}
 			
 			mui.init({
 				preloadLimit: 5, //同时并存的预加载窗口数量
@@ -248,13 +238,14 @@
 			mui.plusReady(function() {
 				//初始化模板
 				initTemplates(); //预加载所有模板	
+				getList();
 				//关闭splash页面；
 				plus.navigator.closeSplashscreen();
 			});
 			
 			//主列表点击事件
 			mui('#list').on('tap', 'a', function() {
-				var id = this.getAttribute('post-id');
+				var id = this.getAttribute('href');
 				var type = this.getAttribute("open-type");
 				console.log(id);
 				  mui.openWindow({
@@ -262,7 +253,11 @@
 							url: "templete/post.html",
 							waiting: {
 								autoShow: false
+							},
+							extras: {
+								postId: id
 							}
+							
 						});
 					
 			});
