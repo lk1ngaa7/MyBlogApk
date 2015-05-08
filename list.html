@@ -8,13 +8,15 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<link rel="stylesheet" href="css/mui.min.css">
+		
 		<script src="js/mui.min.js"></script>
 		<script src="js/app.js"></script>
+		
 		<style type="text/css">
 			#list {
 				/*避免导航边框和列表背景边框重叠，看起来像两条边框似得；*/
 				
-				margin-top: -1px;
+				margin-top: 47px;
 			}
 			html,
 			body {
@@ -38,64 +40,33 @@
           	background-color: #F9F9F9;
           	
           }
+          #sliderSegmentedControl{
+          	background-color: #F7F7F7;
+          	margin-bottom: 10px;
+          	position: fixed;
+          	top: 0px;
+          	z-index: 2;
+          }
+          .my-cell-item{
+          	width:50% !important;
+          	
+          }
 		</style>
 	</head>
 
 	<body>
-       <div class="mui-content">
-			<div id="slider" class="mui-slider">
-				<div class="mui-slider-group mui-slider-loop">
-					<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
-					<div class="mui-slider-item mui-slider-item-duplicate">
-						<a href="#">
-							<img src="images/yuantiao.jpg">
-						</a>
-					</div>
-					<!-- 第一张 -->
-					<div class="mui-slider-item">
-						<a href="#">
-							<img src="images/shuijiao.jpg">
-						</a>
-					</div>
-					<!-- 第二张 -->
-					<div class="mui-slider-item">
-						<a href="#">
-							<img src="images/muwu.jpg">
-						</a>
-					</div>
-					<!-- 第三张 -->
-					<div class="mui-slider-item">
-						<a href="#">
-							<img src="images/cbd.jpg">
-						</a>
-					</div>
-					<!-- 第四张 -->
-					<div class="mui-slider-item">
-						<a href="#">
-							<img src="images/yuantiao.jpg">
-						</a>
-					</div>
-					<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
-					<div class="mui-slider-item mui-slider-item-duplicate">
-						<a href="#">
-							<img src="images/shuijiao.jpg">
-						</a>
-					</div>
-				</div>
-				<div class="mui-slider-indicator">
-					<div class="mui-indicator mui-active"></div>
-					<div class="mui-indicator"></div>
-					<div class="mui-indicator"></div>
-					<div class="mui-indicator"></div>
-				</div>
+		<div class="mui-slider">
+           <div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+				<a href="#item" class="mui-control-item my-cell-item">最近文章</a>
+				<a href="#item" class="mui-control-item my-cell-item">搜索</a>
+				
 			</div>
-    </div>
-    <h5 class="mui-content-padded">
-      Recent Post
-    </h5>
+		   
+	</div>
+    
    			<ul id="list" class="mui-table-view mui-table-view-chevron">
 				<div id="space"></div>
-				<!--<li class="mui-table-view-cell mui-media">
+				<li class="mui-table-view-cell mui-media">
 					<a class="mui-navigate-right" post-id="1">
 						<img class="mui-media-object mui-pull-left" src="images/shuijiao.jpg">
 						<div class="mui-media-body">
@@ -103,7 +74,7 @@
 							<p class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
 						</div>
 					</a>
-				</li>-->
+				</li>
 			</ul>
     
 	</body>
@@ -235,11 +206,16 @@
 				getTemplate('default', 'examples/template.html','examples/accordion.html');
 			};
 			
+			document.querySelector('.mui-slider').addEventListener('slide', function(event) {
+			  console.log("slide");		
+			});
 			mui.plusReady(function() {
 				//初始化模板
 				initTemplates(); //预加载所有模板	
 				getList();
+				//moveTest();
 				//关闭splash页面；
+			
 				plus.navigator.closeSplashscreen();
 			});
 			
@@ -263,23 +239,26 @@
 			});
 			
 			var index = null;//主页面
-			function openMenu () {
-				!index&&(index = mui.currentWebview.parent());
-				mui.fire(index,"menu:open");	
-			}
+		    
 
+			
+			
 			//在android4.4.2中的swipe事件，需要preventDefault一下，否则触发不正常
 			window.addEventListener('dragright', function(e) {
 				e.detail.gesture.preventDefault();
 			});
 
 
-			//监听右滑事件，若侧滑菜单未显示，右滑要显示菜单；
-			window.addEventListener("swiperight",function (e) {
-				//默认滑动角度在-45度到45度之间，都会触发右滑菜单，为避免误操作，可自定义限制滑动角度；
-				if(Math.abs(e.detail.angle)<4){
-					openMenu();
-				}
-			});
+//			//监听右滑事件，若侧滑菜单未显示，右滑要显示菜单；取消右滑事件
+//			window.addEventListener("swiperight",function (e) {
+//				//默认滑动角度在-45度到45度之间，都会触发右滑菜单，为避免误操作，可自定义限制滑动角度；
+//				if(Math.abs(e.detail.angle)<4){
+//					openMenu();
+//				}
+//			});
+//          	function openMenu () {
+//				!index&&(index = mui.currentWebview.parent());
+//				mui.fire(index,"menu:open");	
+//			}
 		</script>
 </html>

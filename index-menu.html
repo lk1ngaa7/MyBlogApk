@@ -25,6 +25,9 @@
 			  .mui-table-view{
 			  	margin-bottom: 35px;
 			  }
+			  .mui-collapse>ul>li {
+			  	background-color: #4E5752 !important;
+			  }
 		</style>
 	</head>
 
@@ -33,14 +36,10 @@
 			<div class="title">TopPhper</div>
 			<div class="content">
 				我的理想，是星辰大海
-				</span>。
-				<p style="margin: 10px 15px;">
-					<button id="close-btn" type="button" class="mui-btn mui-btn-danger mui-btn-block" style="padding: 5px 20px;">关闭侧滑菜单</button>
-				</p>
-				
 			</div>
-			<div class="title" style="margin-bottom: 25px;">单页页面</div>
+			<div class="title" style="margin-bottom: 25px;">Category</div>
 			<ul class="mui-table-view mui-table-view-chevron mui-table-view-inverted" style="color: #ddd;">
+				
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" page-id ="47" >
 						ABOUT ME
@@ -55,6 +54,45 @@
 					<a class="mui-navigate-right"  page-id = "984">
 						To-Do-List
 					</a>
+				</li>
+					<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" page-id ="47" >
+						ABOUT ME
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" page-id="973" >
+						我的书单
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right"  page-id = "984">
+						To-Do-List
+					</a>
+				</li>
+				
+				<li class="mui-table-view-cell mui-collapse">
+					<a class="mui-navigate-right" href="#" open-type="no-open">
+						单页
+					</a>
+					<ul class="mui-table-view mui-table-view-chevron">
+							<li class="mui-table-view-cell">
+								<a class="mui-navigate-right" page-id ="47" >
+									ABOUT ME
+								</a>
+							</li>
+							<li class="mui-table-view-cell">
+								<a class="mui-navigate-right" page-id="973" >
+									我的书单
+								</a>
+							</li>
+							<li class="mui-table-view-cell">
+								<a class="mui-navigate-right"  page-id = "984">
+									To-Do-List
+								</a>
+							</li>
+					</ul>
+
 				</li>
 			</ul>
 		</div>
@@ -77,14 +115,15 @@
 				var id = this.getAttribute("href");
 				var type = this.getAttribute("open-type");
 				var pageId = this.getAttribute("page-id");
-				if(type=="common"){
-					mui.openWindow({
-						id: id,
-						url: this.href,
-						waiting: {
-							autoShow: false
-						}
-					});
+				
+				if(type === "no-open"){
+//					mui.openWindow({
+//						id: id,
+//						url: this.href,
+//						waiting: {
+//							autoShow: false
+//						}
+//					});
 				}else{
 					
 					var href = "templete/page.html?pageId="+pageId;
@@ -125,8 +164,6 @@
 				mui.fire(mui.currentWebview.opener(),"menu:close");
 			}
 			
-			//点击“关闭侧滑菜单”按钮处理逻辑
-			document.getElementById("close-btn").addEventListener("tap",close);
 			//在android4.4.2中的swipe事件，需要preventDefault一下，否则触发不正常
 			window.addEventListener('dragleft', function(e) {
 				e.detail.gesture.preventDefault();
